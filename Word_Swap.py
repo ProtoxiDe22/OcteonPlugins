@@ -1,6 +1,7 @@
 """
 Word swap module
 """
+import re
 import logging
 
 from telegram import Bot, Update
@@ -36,12 +37,20 @@ def wordsw(bot: Bot, update: Update, user, args):
     if msg.reply_to_message is not None:
         if txt.startswith("/s"):
             if not msg.reply_to_message.from_user.name == bot.getMe().name:
-                txt = txt.split('/')
                 origword = txt[2]
                 swap = txt[3]
+                groups = [b.replace("\/", "/") for b in re.split(r"(?<!\\)/", txt)]
+                find = groups[2]
+                replacement = groups[3]
+                if len(groups) > 4:
+                    flags = groups[4]
+                else:
+                    flags = ""
                 if len(origword) > 0:
+                    find_re = re.compile("{}{}".format("(?{})".format(flags.replace("g", "")) if flags.replace("g", "") != "" else "", find))
+                    mod_msg = find_re.sub("<b>" + replacement + "</b>", msg.reply_to_message.text, count=int("g" not in flags))
                     text = "Hello, {}\nDid you mean:\n{}".format(
                             msg.reply_to_message.from_user.first_name,
-                            msg.reply_to_message.text.replace(origword, swap)
+                            mod_msg
                     )
-                    return octeon.message(text=text)
+                    return octeon.message(text=text, parse_mode="HTML")
