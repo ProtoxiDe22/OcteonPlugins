@@ -12,15 +12,18 @@ CURR_TEMPLATE = """
 %s %s
 Data from Yahoo Finance
 """
+
+
 @plugin.command(command="/cash",
                 description="Converts currency",
                 inline_supported=True,
+                required_args=3,
                 hidden=False)
 def currency(bot, update, user, args):
     """
     Powered by Yahoo Finance
     Example usage:
-    
+
     User:
     /cash 100 RUB USD
 
@@ -38,7 +41,7 @@ def currency(bot, update, user, args):
         rate = requests.get(
             "https://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=",
             params={
-                "q":'select * from yahoo.finance.xchange where pair in ("%s")' % (args[1] + args[-1])
+                "q": 'select * from yahoo.finance.xchange where pair in ("%s")' % (args[1] + args[-1])
             }
         ).json()["query"]["results"]["rate"]
         if rate["Name"] == "N/A":

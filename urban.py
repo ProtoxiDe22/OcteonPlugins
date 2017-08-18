@@ -1,7 +1,5 @@
-from telegram.ext import Updater, CommandHandler
 from telegram import Bot, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from requests import get
-from html import escape
 import octeon
 apiurl = "http://api.urbandictionary.com/v0/define"
 message = """
@@ -18,22 +16,38 @@ PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 plugin = octeon.Plugin()
+
+
 def get_definition(term, number):
     definition = get(apiurl, params={
-        "term":term
+        "term": term
     }).json()
     if definition["result_type"] == "exact":
-        deftxt = definition["list"][int(number)-1]
+        deftxt = definition["list"][int(number) - 1]
         return message % deftxt, len(definition["list"])
     else:
         raise IndexError("Not found")
 
+
 @plugin.command(command="/ud",
                 description="Searches for definition of specfied word in urban dictionary",
                 inline_supported=True,
+                required_args=1,
                 hidden=False)
 def urband(_: Bot, ___: Update, user, args):
-    """/ud"""
+    """
+    Example usage:
+    User:/ud test
+    Bot:
+    Definition for test by tester:
+    A process for testing things
+
+    Examples:
+
+    This is a test message
+
+    Link to definition on Urban dictionary (http://test.urbanup.com/708924)
+    """
     defnum = 1
     term = " ".join(args)
     try:
@@ -43,12 +57,16 @@ def urband(_: Bot, ___: Update, user, args):
     else:
         kbd = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(text="⬅️", callback_data="ud:bwd:" + str(defnum) + ":" + term + ":" + str(definition[1])),
-                InlineKeyboardButton(text="1/" + str(definition[1]), callback_data="none"),
-                InlineKeyboardButton(text="➡️", callback_data="ud:fwd:" + str(defnum) + ":" + term + ":" + str(definition[1]))
+                InlineKeyboardButton(text="⬅️", callback_data="ud:bwd:" +
+                                     str(defnum) + ":" + term + ":" + str(definition[1])),
+                InlineKeyboardButton(
+                    text="1/" + str(definition[1]), callback_data="none"),
+                InlineKeyboardButton(text="➡️", callback_data="ud:fwd:" +
+                                     str(defnum) + ":" + term + ":" + str(definition[1]))
             ]
         ])
         return octeon.message(definition[0], parse_mode="HTML", inline_keyboard=kbd)
+
 
 @plugin.inline_button("ud")
 def urban_pswitch(bot, update, query):
@@ -56,19 +74,22 @@ def urban_pswitch(bot, update, query):
     term = data[3]
     defnum = None
     if data[1] == "fwd":
-        if not int(data[2])+1 > int(data[-1]):
+        if not int(data[2]) + 1 > int(data[-1]):
             defnum = int(data[2])+1
     elif data[1] == "bwd":
-        if not int(data[2])-1 <= 0:
-            defnum = int(data[2])-1
+        if not int(data[2]) - 1 <= 0:
+            defnum = int(data[2]) - 1
     if (not data[2] == defnum) and defnum:
-        definition = get_definition(term,defnum)
+        definition = get_definition(term, defnum)
         update.effective_message.edit_text(definition[0], parse_mode="HTML")
         kbd = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(text="⬅️", callback_data="ud:bwd:" + str(defnum) + ":" + term + ":" + str(definition[1])),
-                InlineKeyboardButton(text=str(defnum) + "/" + str(definition[1]), callback_data="none"),
-                InlineKeyboardButton(text="➡️", callback_data="ud:fwd:" + str(defnum) + ":" + term + ":" + str(definition[1]))
+                InlineKeyboardButton(text="⬅️", callback_data="ud:bwd:" +
+                                     str(defnum) + ":" + term + ":" + str(definition[1])),
+                InlineKeyboardButton(
+                    text=str(defnum) + "/" + str(definition[1]), callback_data="none"),
+                InlineKeyboardButton(text="➡️", callback_data="ud:fwd:" +
+                                     str(defnum) + ":" + term + ":" + str(definition[1]))
             ]
         ])
         update.effective_message.edit_reply_markup(reply_markup=kbd)

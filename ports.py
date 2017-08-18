@@ -11,10 +11,14 @@ Port <code>#%(port)s</code>
 <b>TCP</b>:<i>%(tcp)s</i>
 <b>UDP</b>:<i>%(udp)s</i>
 """
-PORTLIST = requests.get("https://raw.githubusercontent.com/mephux/ports.json/master/ports.lists.json").json()
+PORTLIST = requests.get(
+    "https://raw.githubusercontent.com/mephux/ports.json/master/ports.lists.json").json()
+
+
 @plugin.command(command="/port",
                 description="Sends information about port",
                 inline_supported=True,
+                required_args=1,
                 hidden=False)
 def port(bot, update, user, args):
     if " ".join(args) in PORTLIST:

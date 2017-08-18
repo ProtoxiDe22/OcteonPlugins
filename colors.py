@@ -3,15 +3,17 @@ from io import BytesIO
 
 from PIL import Image, ImageColor
 from telegram import Bot, Update
-from telegram.ext import CommandHandler, Updater
 import octeon
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 plugin = octeon.Plugin()
+
+
 @plugin.command(command="/color",
                 description="Create color samples",
                 inline_supported=True,
+                required_args=1,
                 hidden=False)
 def rgb(b: Bot, u: Update, user, args):
     """
