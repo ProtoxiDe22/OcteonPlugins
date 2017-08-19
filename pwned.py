@@ -1,28 +1,40 @@
 """Have I been pwned module"""
 from cgi import escape
-from telegram.ext import Updater, CommandHandler
 from telegram import Bot, Update
 import requests
 from emoji import emojize
-import constants
+import octeon
 headers = {
-    'User-Agent': 'Octeon: Have I been Pwned module'
+    'User-Agent': 'OcteonHIBP/1.0'
 }
 
 
-def preload(*_):
-    return
+PLUGINVERSION = 2
+# Always name this variable as `plugin`
+# If you dont, module loader will fail to load the plugin!
+plugin = octeon.Plugin()
 
 
+@plugin.command(command="/pwned",
+                description="Have you been hacked?",
+                inline_supported=True,
+                hidden=False,
+                required_args=1)
 def pwned(_: Bot, update: Update, user, args):
+    """
+    Example usage:
+    User: /pwned asdasdsad
+    Bot: ✅Got cool news for you! You are NOT pwned!
+    """
     account = " ".join(args)
     r = requests.get(
         "https://haveibeenpwned.com/api/v2/breachedaccount/%s" % account)
     if r.status_code == 404:
-        return emojize(":white_check_mark:Got cool news for you! You are NOT pwned!", use_aliases=True), constants.TEXT
+        return octeon.message(emojize(":white_check_mark:Got cool news for you! You are NOT pwned!", use_aliases=True))
     else:
         pwns = r.json()
-        message = emojize(":warning:<b>Oh No!</b> You have been <b>pwned</b>:\n<b>Leaked data:</b><i>")
+        message = emojize(
+            ":warning:<b>Oh No!</b> You have been <b>pwned</b>:\n<b>Leaked data:</b><i>")
         pwnedthings = {}
         pwnedsites = {}
         for pwn in pwns:
@@ -32,13 +44,4 @@ def pwned(_: Bot, update: Update, user, args):
         message += escape(", ".join(list(pwnedthings)))
         message += "</i>\n<b>From sites:</b><i>\n" + \
             escape("\n".join(list(pwnedsites))) + "</i>"
-        return message, constants.HTMLTXT
-
-COMMANDS = [
-    {
-        "command":"/pwned",
-        "function":pwned,
-        "description":"Have you been hacked?",
-        "inline_support": True
-    }
-]
+        return octeon.message(message, parse_mode="HTML")
