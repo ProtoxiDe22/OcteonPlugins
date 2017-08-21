@@ -15,7 +15,7 @@ def cowsay(_, update, user, args):
     proc = Popen(['cowsay'], stdout=PIPE, stdin=PIPE)
     stdout = str(
         proc.communicate(input=bytes(args, 'utf-8'))[0], 'utf-8').split('\n')
-    font = ImageFont.truetype("plugdata/cowsay.ttf", 12)
+    font = ImageFont.truetype("arial.ttf", 12)
     width = []
     height_t = []
     height = 0
