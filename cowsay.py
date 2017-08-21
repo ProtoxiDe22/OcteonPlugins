@@ -6,11 +6,18 @@ PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 plugin = octeon.Plugin()
+
+
 @plugin.command(command="/cowsay",
                 description="Have you mooed today?",
                 inline_supported=True,
+                required_args=1,
                 hidden=False)
 def cowsay(_, update, user, args):
+    """
+    User:/cowsay test
+    Bot:[Picture of cow saying moo]
+    """
     args = " ".join(args)
     proc = Popen(['cowsay'], stdout=PIPE, stdin=PIPE)
     stdout = str(

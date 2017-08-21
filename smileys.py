@@ -171,8 +171,8 @@ ears = [
     ['ლ(', 'ლ)'],
     ['ᕕ(', ')ᕗ'],
     ['(∩', ')⊃━☆ﾟ.*'],
-    ['|']
 ]
+
 
 def preload(*_):
     return
@@ -201,22 +201,21 @@ def rlg(b: Bot, u: update, user, args):
 
 COMMANDS = [
     {
-        "command":"/lenny",
-        "function":lenny,
-        "description":"( ͡° ͜ʖ ͡° )",
-        "inline_support":True
+        "command": "/lenny",
+        "function": lenny,
+        "description": "( ͡° ͜ʖ ͡° )",
+        "inline_support": True
     },
     {
-        "command":"/shrug",
-        "function":shrug,
-        "description":"¯\_(ツ)_/¯",
-        "inline_support":True
+        "command": "/shrug",
+        "function": shrug,
+        "description": "¯\_(ツ)_/¯",
+        "inline_support": True
     },
     {
-        "command":"/rlg",
-        "function":rlg,
-        "description":"Latest science innovation - Random Lenny Generator",
-        "inline_support":True
+        "command": "/rlg",
+        "function": rlg,
+        "description": "Latest science innovation - Random Lenny Generator",
+        "inline_support": True
     },
 ]
-

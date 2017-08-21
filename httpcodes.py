@@ -6,10 +6,11 @@ import logging
 
 from telegram import Bot, Update
 import requests
+import octeon
 
-import constants # pylint: disable=E0401
 LOGGER = logging.getLogger("HTTP codes")
-CODES = requests.get("https://github.com/for-GET/know-your-http-well/raw/master/json/status-codes.json").json()
+CODES = requests.get(
+    "https://github.com/for-GET/know-your-http-well/raw/master/json/status-codes.json").json()
 MESSAGE = """
 %(code)s - %(phrase)s
 %(spec_title)s
@@ -17,34 +18,31 @@ MESSAGE = """
 Link to specification:%(spec_href)s
 """
 
-def preload(*_):
-    """
-    This loads whenever plugin starts
-    Even if you dont need it, you SHOULD put at least
-    return None, otherwise your plugin wont load
-    """
-    pass
+PLUGINVERSION = 2
+# Always name this variable as `plugin`
+# If you dont, module loader will fail to load the plugin!
+plugin = octeon.Plugin()
 
 
-def get_code(_: Bot, __: Update, ___, args): # pylint: disable=W0613
-    """/get_code"""
-    if len(args) == 0:
-        return "No status code passed!", constants.TEXT, "failed"
+@plugin.command(command="/httpcode",
+                description="Sends information about specific http status code",
+                inline_supported=True,
+                required_args=1,
+                hidden=False)
+def get_code(_: Bot, __: Update, ___, args):  # pylint: disable=W0613
+    """
+    Example usage:
+    User: /httpcode 451
+    Bot:451 - Unavailable For Legal Reasons
+    draft-ietf-httpbis-legally-restricted-status
+    "This status code indicates that the server is denying access to the resource in response to a legal demand."
+    Link to specification:https://tools.ietf.org/html/draft-ietf-httpbis-legally-restricted-status
+    """
+
+    if len(args[0]) == 3:
+        for code in CODES:
+            if args[0] == code["code"]:
+                return octeon.message(MESSAGE % code)
+        return octeon.message("Cant find " + args[0], failed=True)
     else:
-        if len(args[0]) == 3:
-            for code in CODES:
-                if args[0] == code["code"]:
-                    return MESSAGE % code, constants.TEXT
-            return "Cant find " + args[0], constants.TEXT
-        else:
-            return "Invalid code passed:" + args[0], constants.TEXT, "failed"
-
-COMMANDS = [
-    {
-        "command":"/httpcode",
-        "function":get_code,
-        "description":"Sends information about specific http status code",
-        "inline_support":True
-    }
-]
-
+        return octeon.message("Invalid code passed:" + args[0], failed=True)
