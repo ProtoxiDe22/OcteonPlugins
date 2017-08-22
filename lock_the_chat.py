@@ -24,7 +24,7 @@ def lock_check(bot, update):
 def lock(bot, update, user, args):
     if update.message.chat_id in locked:
         return octeon.message("Chat is already locked")
-    if update.message.chat.type != "PRIVATE":
+    if update.message.chat.type != "private":
         for admin in update.message.chat.get_administrators():
             if admin.user.username == update.message.from_user.username:
                 for admin in update.message.chat.get_administrators():
