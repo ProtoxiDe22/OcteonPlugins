@@ -32,10 +32,10 @@ def translate(bot: Bot, update: Update, user, args): # pylint: disable=W0613
         else:
             lang = "en"
         yandex = post(YAURL, params={"text":update.message.reply_to_message.text, "lang":lang}).json()
-        try:
-            return octeon.message(yandex["lang"].upper() + "\n" + yandex["text"][0])
-        except KeyError:
-            return octeon.message(yandex["error"], failed=True)
+        if "lang" in yandex:
+            return octeon.message(yandex["lang"].upper() + "\n" + yandex["text"][0] + "\n\nPowered by Yandex Translate API")
+        else:
+            return octeon.message(yandex["message"], failed=True)
 
 COMMANDS = [
     {
