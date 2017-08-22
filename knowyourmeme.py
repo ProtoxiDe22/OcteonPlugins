@@ -46,6 +46,6 @@ def meme(bot: Bot, update: Update, user, args):  # pylint: disable=W0613
                 "Definition on KnowYourMeme.com", url="http://knowyourmeme.com" + meme["url"])]
         ]
         markup = InlineKeyboardMarkup(keyboard)
-        return octeon.message(text=message, reply_markup=markup, photo=meme["icon_url"])
+        return octeon.message(text=message, inline_keyboard=markup, photo=meme["icon_url"])
     else:
         return octeon.message(text='Not found!', failed=True)
