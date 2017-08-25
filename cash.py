@@ -1,3 +1,7 @@
+import logging
+import csv
+from io import StringIO
+
 import requests
 
 import octeon
@@ -12,6 +16,7 @@ CURR_TEMPLATE = """
 %s %s
 Data from Yahoo Finance
 """
+LOGGER = logging.getLogger("/cash")
 
 
 @plugin.command(command="/cash",
@@ -39,19 +44,21 @@ def currency(bot, update, user, args):
                               failed=True)
     else:
         rate = requests.get(
-            "https://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=",
+            "http://download.finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1",
             params={
-                "q": 'select * from yahoo.finance.xchange where pair in ("%s")' % (args[1] + args[-1])
+                "s": args[1] + args[-1] + "=X"
             }
-        ).json()["query"]["results"]["rate"]
-        if rate["Name"] == "N/A":
+        )
+        LOGGER.debug(rate.text)
+        csv_rate = list(csv.reader(StringIO(rate.text), delimiter=","))[0]
+        if csv_rate[1] == "N/A":
             return octeon.message('Bad currency name', failed=True)
         else:
             return octeon.message(CURR_TEMPLATE % (
                 args[0],
                 args[1],
-                round(float(args[0])*float(rate["Rate"]), 2),
+                round(float(args[0])*float(csv_rate[1]), 2),
                 args[-1],
-                rate["Date"],
-                rate["Time"]
+                csv_rate[-2],
+                csv_rate[-1]
             ))
