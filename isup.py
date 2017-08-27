@@ -10,10 +10,14 @@ plugin = octeon.Plugin()
                 hidden=False)
 def isup(bot, update, user, args):
     if args:
-        r = requests.get("http://downforeveryoneorjustme.com/" + args[0]).text
-        if "looks down" in r:
-            return octeon.message(text="It's not just you! %s looks down from here. " % args[0])
-        elif "It's just you" in r:
-            return octeon.message(text="It's just you. %s is up. " % args[0])
-        elif "interwho" in r:
-            return octeon.message(text="Huh? %s doesn't look like a site on the interwho. " % args[0])
+        r = requests.get("http://downforeveryoneorjustme.com/" + args[0])
+        if r.ok:
+            r = r.text
+            if "looks down" in r:
+                return octeon.message(text="It's not just you! %s looks down from here. " % args[0])
+            elif "It's just you" in r:
+                return octeon.message(text="It's just you. %s is up. " % args[0])
+            elif "interwho" in r:
+                return octeon.message(text="Huh? %s doesn't look like a site on the interwho. " % args[0])
+        else:
+            return octeon.message(text="There is some problems with isup.me. I cant provide you info on this site, sorry.", failed=True)
