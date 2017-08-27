@@ -10,7 +10,10 @@ plugin = octeon.Plugin()
                 hidden=False)
 def isup(bot, update, user, args):
     if args:
-        r = requests.get("http://downforeveryoneorjustme.com/" + args[0])
+        try:
+            r = requests.get("http://downforeveryoneorjustme.com/" + args[0])
+        except (UnicodeDecodeError, UnicodeDecodeError):
+            return octeon.message(text="There is some problems with isup.me. I cant provide you info on this site, sorry.", failed=True)
         if r.ok:
             r = r.text
             if "looks down" in r:
