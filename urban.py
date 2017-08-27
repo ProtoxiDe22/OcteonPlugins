@@ -1,5 +1,6 @@
 from telegram import Bot, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from requests import get
+import html
 import octeon
 apiurl = "http://api.urbandictionary.com/v0/define"
 message = """
@@ -24,10 +25,16 @@ def get_definition(term, number):
     }).json()
     if definition["result_type"] == "exact":
         deftxt = definition["list"][int(number) - 1]
+        deftxt = escape_definition(deftxt)
         return message % deftxt, len(definition["list"])
     else:
         raise IndexError("Not found")
 
+def escape_definition(definition):
+    for key, value in definition.items():
+        if isinstance(value, str):
+            definition[key] = html.escape(value)
+    return definition
 
 @plugin.command(command="/ud",
                 description="Searches for definition of specfied word in urban dictionary",
