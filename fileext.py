@@ -26,10 +26,13 @@ def get_ext(bot, update, user, args):
         if not key.startswith("_"):
             message += "\n<b>%s</b>: <i>%s</i>" % (key, value)
     keyboard = [[InlineKeyboardButton(text="Related links:", callback_data="none")]]
-    for item in info["_links"]:
-        text, link = list(item.items())[0]
-        keyboard.append([InlineKeyboardButton(text=text, url=link)])
-    return octeon.message(text=message, parse_mode="HTML", inline_keyboard=InlineKeyboardMarkup(keyboard))
+    if "_links" in info:
+        for item in info["_links"]:
+            text, link = list(item.items())[0]
+            keyboard.append([InlineKeyboardButton(text=text, url=link)])
+        return octeon.message(text=message, parse_mode="HTML", inline_keyboard=InlineKeyboardMarkup(keyboard))
+    else:
+        return octeon.message(text=message, parse_mode="HTML")
 
 def _get_extension(extension):
     r = requests.get("http://filext.com/file-extension/" + extension,
