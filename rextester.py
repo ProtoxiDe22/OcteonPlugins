@@ -2,6 +2,7 @@ import octeon
 from bs4 import BeautifulSoup
 from io import BytesIO
 from base64 import b64decode
+import html
 import requests
 import logging
 LOGGER = logging.getLogger("RexTester")
@@ -40,7 +41,7 @@ def rt(bot, update, user, args):
     _ = lambda x: octeon.locale.get_localized(x, update.message.chat.id)
     args[0] = args[0].lower()
     if args[0] == "getlangs":
-        return octeon.message(_(LOCALE_STR["available_langs"] % LANG_LIST_STR), parse_mode="HTML")
+        return octeon.message(_(LOCALE_STR["available_langs"]) % LANG_LIST_STR, parse_mode="HTML")
     elif len(args) == 1:
         return octeon.message(_(LOCALE_STR["not_enough_arguments"]), failed=True, parse_mode="HTML")
     elif len(args) >= 2:
@@ -64,7 +65,7 @@ def rt(bot, update, user, args):
                 for key, value in r.items():
                     if key.lower() in LOCALE_STR and value:
                         if not (key == "Result" and args[0] == "octave"):
-                            resp.append(_(LOCALE_STR[key.lower()]) + ":\n<code>%s</code>\n" % value.rstrip("\n"))
+                            resp.append(_(LOCALE_STR[key.lower()]) + ":\n<code>%s</code>\n" % html.escape(value.rstrip("\n")))
                 if r["Files"]:
                     graph = BytesIO(b64decode(r["Files"][0]))
                 else:
