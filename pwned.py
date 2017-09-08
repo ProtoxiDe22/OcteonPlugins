@@ -5,7 +5,7 @@ import requests
 from emoji import emojize
 import core
 headers = {
-    'User-Agent': 'OcteonHIBP/1.0'
+    'User-Agent': 'OctoBotHIBP/1.0'
 }
 
 

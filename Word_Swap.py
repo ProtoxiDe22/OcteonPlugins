@@ -40,7 +40,7 @@ def wordsw(bot: Bot, update: Update, user, args):
     [In reply to User A]
     /s/Hi/Bye
 
-    Octeon
+    OctoBot
     Hello, User A
     Did you mean:
     Bye

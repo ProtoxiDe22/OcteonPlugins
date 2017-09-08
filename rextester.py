@@ -10,7 +10,7 @@ PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 plugin = core.Plugin()
-HEADERS = {"User-Agent":"Octeon/1.0"}
+HEADERS = {"User-Agent":"OctoBot/1.0"}
 def get_langs():
     r = requests.get("http://rextester.com/main", headers=HEADERS)
     if r.ok:

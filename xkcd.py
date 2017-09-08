@@ -32,7 +32,7 @@ def xkcd(bot: Bot, update: Update, user, args): # pylint: disable=W0613
     User:
     /xkcd 1
 
-    Octeon:
+    OctoBot:
     title: Barrel - Part 1
     number: 1
     date(yyyy-mm-dd for christ's sake): 2006-01-01

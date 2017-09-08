@@ -32,7 +32,7 @@ def currency(bot, update, user, args):
     User:
     /cash 100 RUB USD
 
-    Octeon:
+    OctoBot:
     100 RUB = 1.66 USD
 
     8/7/2017 10:30pm

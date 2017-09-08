@@ -23,28 +23,28 @@ def rgb(b: Bot, u: Update, user, args):
     User:
     /color #FF0000
 
-    Octeon:
+    OctoBot:
     [ Photo ]
 
-    Octeon:
+    OctoBot:
     #FF0000
 
     User:
     /color 255 0 0
 
-    Octeon:
+    OctoBot:
     [ Photo ]
 
-    Octeon Dev:
+    OctoBot Dev:
     [255, 0, 0]
 
     User:
     /color 0xFF 0x0 0x0
 
-    Octeon:
+    OctoBot:
     [ Photo ]
 
-    Octeon:
+    OctoBot:
     [255, 0, 0]
     """
     if args[0].startswith("#"):
