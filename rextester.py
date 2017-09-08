@@ -1,4 +1,4 @@
-import octeon
+import core
 from bs4 import BeautifulSoup
 from io import BytesIO
 from base64 import b64decode
@@ -9,7 +9,7 @@ LOGGER = logging.getLogger("RexTester")
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 HEADERS = {"User-Agent":"Octeon/1.0"}
 def get_langs():
     r = requests.get("http://rextester.com/main", headers=HEADERS)
@@ -31,19 +31,19 @@ LOGGER.info("Rextester available languages:%s", LANGS)
 LANG_LIST_STR = ""
 for lang in LANGS:
     LANG_LIST_STR += lang + ", "
-LOCALE_STR = octeon.locale.get_locales_dict("rextester")
+LOCALE_STR = core.locale.get_locales_dict("rextester")
 @plugin.command(command="/rextester",
                 description="Runs code on rextester.com(language list=http://rextester.com/main). Supply language as first argument. Use /rextester getlangs for list of languages",
                 inline_supported=True,
                 hidden=False,
                 required_args=1)
 def rt(bot, update, user, args):
-    _ = lambda x: octeon.locale.get_localized(x, update.message.chat.id)
+    _ = lambda x: core.locale.get_localized(x, update.message.chat.id)
     args[0] = args[0].lower()
     if args[0] == "getlangs":
-        return octeon.message(_(LOCALE_STR["available_langs"]) % LANG_LIST_STR, parse_mode="HTML")
+        return core.message(_(LOCALE_STR["available_langs"]) % LANG_LIST_STR, parse_mode="HTML")
     elif len(args) == 1:
-        return octeon.message(_(LOCALE_STR["not_enough_arguments"]), failed=True, parse_mode="HTML")
+        return core.message(_(LOCALE_STR["not_enough_arguments"]), failed=True, parse_mode="HTML")
     elif len(args) >= 2:
         if args[0] in LANGS:
             code = " ".join(args[1:]).split("/stdin")
@@ -70,8 +70,8 @@ def rt(bot, update, user, args):
                     graph = BytesIO(b64decode(r["Files"][0]))
                 else:
                     graph = None
-                return octeon.message("\n".join(sorted(resp)), parse_mode="HTML", photo=graph)
+                return core.message("\n".join(sorted(resp)), parse_mode="HTML", photo=graph)
             else:
-                return octeon.message(text=_(LOCALE_STR["rextester_problems"]))
+                return core.message(text=_(LOCALE_STR["rextester_problems"]))
         else:
-            return octeon.message(text=_(LOCALE_STR["unknown_lang"]) % args[0], failed=True, parse_mode='HTML')
+            return core.message(text=_(LOCALE_STR["unknown_lang"]) % args[0], failed=True, parse_mode='HTML')

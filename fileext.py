@@ -1,4 +1,4 @@
-import octeon
+import core
 from pprint import pprint
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 import requests
@@ -9,7 +9,7 @@ from collections import OrderedDict
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 @plugin.command(command="/extension",
                 description="Looks up for file extension on filext.com",
                 inline_supported=True,
@@ -30,13 +30,13 @@ def get_ext(bot, update, user, args):
         for item in info["_links"]:
             text, link = list(item.items())[0]
             keyboard.append([InlineKeyboardButton(text=text, url=link)])
-        return octeon.message(text=message, parse_mode="HTML", inline_keyboard=InlineKeyboardMarkup(keyboard))
+        return core.message(text=message, parse_mode="HTML", inline_keyboard=InlineKeyboardMarkup(keyboard))
     else:
-        return octeon.message(text=message, parse_mode="HTML")
+        return core.message(text=message, parse_mode="HTML")
 
 def _get_extension(extension):
     r = requests.get("http://filext.com/file-extension/" + extension,
-                     headers={"User-Agent":"Telegram @octeon_bot/1.0"})
+                     headers={"User-Agent":"Telegram @core_bot/1.0"})
     if r.ok:
         if not "did not return any results in the FILEXT.com database" in r.text:
             data = OrderedDict({"_links":[OrderedDict({"Extension on filext.com":r.url})]})

@@ -4,12 +4,12 @@ from io import StringIO
 
 import requests
 
-import octeon
+import core
 
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 CURR_TEMPLATE = """
 %s %s = %s %s
 
@@ -39,7 +39,7 @@ def currency(bot, update, user, args):
     Data from Yahoo Finance
     """
     if len(args) < 3:
-        return octeon.message(text="Not enough arguments! Example:<code>/cash 100 RUB USD</code>",
+        return core.message(text="Not enough arguments! Example:<code>/cash 100 RUB USD</code>",
                               parse_mode="HTML",
                               failed=True)
     else:
@@ -52,9 +52,9 @@ def currency(bot, update, user, args):
         LOGGER.debug(rate.text)
         csv_rate = list(csv.reader(StringIO(rate.text), delimiter=","))[0]
         if csv_rate[1] == "N/A":
-            return octeon.message('Bad currency name', failed=True)
+            return core.message('Bad currency name', failed=True)
         else:
-            return octeon.message(CURR_TEMPLATE % (
+            return core.message(CURR_TEMPLATE % (
                 args[0],
                 args[1],
                 round(float(args[0])*float(csv_rate[1]), 2),

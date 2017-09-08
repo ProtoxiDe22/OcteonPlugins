@@ -10,7 +10,7 @@ from requests import post
 
 import constants # pylint: disable=E0401
 import settings
-import octeon
+import core
 
 LOGGER = logging.getLogger("YTranslate")
 YAURL = "https://translate.yandex.net/api/v1.5/tr.json/translate?"
@@ -33,9 +33,9 @@ def translate(bot: Bot, update: Update, user, args): # pylint: disable=W0613
             lang = "en"
         yandex = post(YAURL, params={"text":update.message.reply_to_message.text, "lang":lang}).json()
         if "lang" in yandex:
-            return octeon.message(yandex["lang"].upper() + "\n" + yandex["text"][0] + "\n\nPowered by Yandex Translate API")
+            return core.message(yandex["lang"].upper() + "\n" + yandex["text"][0] + "\n\nPowered by Yandex Translate API")
         else:
-            return octeon.message(yandex["message"], failed=True)
+            return core.message(yandex["message"], failed=True)
 
 COMMANDS = [
     {

@@ -3,11 +3,11 @@ from io import BytesIO
 
 from PIL import Image, ImageColor
 from telegram import Bot, Update
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/color",
@@ -52,7 +52,7 @@ def rgb(b: Bot, u: Update, user, args):
         try:
             usercolor = ImageColor.getrgb(color)
         except Exception:
-            return octeon.message("Invalid Color Code supplied", failed=True)
+            return core.message("Invalid Color Code supplied", failed=True)
     elif args[0].startswith("0x"):
         if len(args) > 2:
             usercolor = int(args[0][2:], 16), int(
@@ -67,4 +67,4 @@ def rgb(b: Bot, u: Update, user, args):
     file = BytesIO()
     im.save(file, "PNG")
     file.seek(0)
-    return octeon.message(text=color, photo=file)
+    return core.message(text=color, photo=file)

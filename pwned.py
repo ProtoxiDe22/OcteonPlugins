@@ -3,7 +3,7 @@ from cgi import escape
 from telegram import Bot, Update
 import requests
 from emoji import emojize
-import octeon
+import core
 headers = {
     'User-Agent': 'OcteonHIBP/1.0'
 }
@@ -12,7 +12,7 @@ headers = {
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/pwned",
@@ -30,7 +30,7 @@ def pwned(_: Bot, update: Update, user, args):
     r = requests.get(
         "https://haveibeenpwned.com/api/v2/breachedaccount/%s" % account)
     if r.status_code == 404:
-        return octeon.message(emojize(":white_check_mark:Got cool news for you! You are NOT pwned!", use_aliases=True))
+        return core.message(emojize(":white_check_mark:Got cool news for you! You are NOT pwned!", use_aliases=True))
     else:
         pwns = r.json()
         message = emojize(
@@ -44,4 +44,4 @@ def pwned(_: Bot, update: Update, user, args):
         message += escape(", ".join(list(pwnedthings)))
         message += "</i>\n<b>From sites:</b><i>\n" + \
             escape("\n".join(list(pwnedsites))) + "</i>"
-        return octeon.message(message, parse_mode="HTML")
+        return core.message(message, parse_mode="HTML")

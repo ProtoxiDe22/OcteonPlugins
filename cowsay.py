@@ -1,11 +1,11 @@
 from subprocess import Popen, PIPE
 from PIL import Image, ImageFont, ImageDraw
 from io import BytesIO
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/cowsay",
@@ -42,4 +42,4 @@ def cowsay(_, update, user, args):
     photo = BytesIO()
     img.save(photo, 'PNG')
     photo.seek(0)
-    return octeon.message(photo=photo)
+    return core.message(photo=photo)

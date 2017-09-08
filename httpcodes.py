@@ -6,7 +6,7 @@ import logging
 
 from telegram import Bot, Update
 import requests
-import octeon
+import core
 
 LOGGER = logging.getLogger("HTTP codes")
 CODES = requests.get(
@@ -21,7 +21,7 @@ Link to specification:%(spec_href)s
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/httpcode",
@@ -42,7 +42,7 @@ def get_code(_: Bot, __: Update, ___, args):  # pylint: disable=W0613
     if len(args[0]) == 3:
         for code in CODES:
             if args[0] == code["code"]:
-                return octeon.message(MESSAGE % code)
-        return octeon.message("Cant find " + args[0], failed=True)
+                return core.message(MESSAGE % code)
+        return core.message("Cant find " + args[0], failed=True)
     else:
-        return octeon.message("Invalid code passed:" + args[0], failed=True)
+        return core.message("Invalid code passed:" + args[0], failed=True)

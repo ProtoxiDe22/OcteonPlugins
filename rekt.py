@@ -1,5 +1,5 @@
 import random
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
@@ -96,7 +96,7 @@ REKT_VARIANTS = [
     "☐ not rekt ☐ rekt ☑️ {}",
     "☑️ not rekt ☐ rekt",
     "☐ not rekt ☑️ rekt"]
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/rekt",
@@ -104,4 +104,4 @@ plugin = octeon.Plugin()
                 inline_supported=True,
                 hidden=False)
 def rekt(bot, update, user, args):
-    return octeon.message(text=random.choice(REKT_VARIANTS).format(random.choice(REKTLIST)))
+    return core.message(text=random.choice(REKT_VARIANTS).format(random.choice(REKTLIST)))

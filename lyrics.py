@@ -1,12 +1,12 @@
 from PyLyrics import *
 from telegram import Bot, Update
-import octeon
+import core
 LYRICSINFO = "\n[Full Lyrics](http://lyrics.wikia.com/wiki/%s:%s)"
 
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/lyrics",
@@ -29,10 +29,10 @@ def lyrics(_: Bot, update: Update, user, args):
             lyrics = "\n".join(PyLyrics.getLyrics(
                 song[0], song[1]).split("\n")[:20])
         except ValueError as e:
-            return octeon.message("❌ Song %s not found :(" % song[1], failed=True)
+            return core.message("❌ Song %s not found :(" % song[1], failed=True)
         else:
             lyricstext = LYRICSINFO % (song[0].replace(
                 " ", "_"), song[1].replace(" ", "_"))
-            return octeon.message(lyrics + lyricstext, parse_mode="MARKDOWN")
+            return core.message(lyrics + lyricstext, parse_mode="MARKDOWN")
     else:
-        return octeon.message("Invalid syntax!", failed=True)
+        return core.message("Invalid syntax!", failed=True)

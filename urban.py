@@ -1,7 +1,7 @@
 from telegram import Bot, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from requests import get
 import html
-import octeon
+import core
 apiurl = "http://api.urbandictionary.com/v0/define"
 message = """
 Definition for <b>%(word)s</b> by %(author)s:
@@ -16,7 +16,7 @@ Examples:
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 def get_definition(term, number):
@@ -60,7 +60,7 @@ def urband(_: Bot, ___: Update, user, args):
     try:
         definition = get_definition(term, defnum)
     except IndexError:
-        return octeon.message("Nothing found!", failed=True)
+        return core.message("Nothing found!", failed=True)
     else:
         kbd = InlineKeyboardMarkup([
             [
@@ -72,7 +72,7 @@ def urband(_: Bot, ___: Update, user, args):
                                      str(defnum) + ":" + term + ":" + str(definition[1]))
             ]
         ])
-        return octeon.message(definition[0], parse_mode="HTML", inline_keyboard=kbd)
+        return core.message(definition[0], parse_mode="HTML", inline_keyboard=kbd)
 
 
 @plugin.inline_button("ud")

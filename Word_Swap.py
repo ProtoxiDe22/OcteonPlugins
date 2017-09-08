@@ -9,7 +9,7 @@ import difflib
 from telegram import Bot, Update
 from telegram.ext import Filters, MessageHandler, Updater
 
-import octeon
+import core
 PLUGINVERSION = 2
 from difflib import Differ
 
@@ -25,7 +25,7 @@ def appendBoldChanges(s1, s2):
                                                            if not i[:1] in '-?'])
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 @plugin.command(command="/s/",
                 description="Swaps word in message",
                 inline_supported=True,
@@ -67,4 +67,4 @@ def wordsw(bot: Bot, update: Update, user, args):
                             msg.reply_to_message.from_user.first_name,
                             mod_msg
                     )
-                    return octeon.message(text=text, parse_mode="HTML")
+                    return core.message(text=text, parse_mode="HTML")

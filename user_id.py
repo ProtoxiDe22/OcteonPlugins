@@ -6,11 +6,11 @@ import logging
 from telegram import Bot, Update
 from telegram.ext import MessageHandler, Updater, Filters
 
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 @plugin.command(command="/id",
                 description="Sends chat/user id",
                 inline_supported=True,
