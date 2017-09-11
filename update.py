@@ -25,7 +25,6 @@ Entry is not an option.
 Will we do this all day?
 Move on immediately.
 No. No. And NO.""".split("\n")[1:]
-access_try = 0
 global access_try
 access_try = 0
 
