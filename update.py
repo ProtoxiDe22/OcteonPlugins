@@ -33,6 +33,7 @@ access_try = 0
                 inline_supported=True,
                 hidden=True)
 def doupd(bot, update, user, args):
+    global access_try
     if update.message.from_user.id == settings.ADMIN:
         os.system("git pull")
         os.system("git submodule update")
