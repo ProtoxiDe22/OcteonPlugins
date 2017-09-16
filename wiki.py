@@ -103,7 +103,7 @@ def wikipedia_pswitch(bot, update, query):
             defnum = int(data[2]) - 1
     if (not data[2] == defnum) and defnum:
         definition = get_definition(term, defnum)
-        update.effective_message.edit_text(definition[0], parse_mode="HTML")
+        query.edit_message_text(definition[0], parse_mode="HTML")
         kbd = InlineKeyboardMarkup([
             [
                 InlineKeyboardButton(text="⬅️", callback_data="wiki:bwd:" +
@@ -114,7 +114,7 @@ def wikipedia_pswitch(bot, update, query):
                                      str(defnum) + ":" + term + ":" + str(definition[1]))
             ]
         ])
-        update.effective_message.edit_reply_markup(reply_markup=kbd)
+        query.edit_message_reply_markup(reply_markup=kbd)
         if data[1] == "fwd":
             query.answer("Switched to next entry")
         else:
