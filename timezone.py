@@ -26,7 +26,7 @@ def timezonecmd(_: Bot, update: Update, user, args):
     timezone = " ".join(args)
     try:
         timezone = pendulum.now(timezone)
-    except TimezoneNotFound:
+    except (TimezoneNotFound, ValueError):
         return core.message("⚠You specifed unknown timezone", failed=True)
     else:
         return core.message(timezone.timezone_name + ": " + timezone.format(TIMEFORMAT))

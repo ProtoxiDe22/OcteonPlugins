@@ -100,3 +100,9 @@ def urban_pswitch(bot, update, query):
             ]
         ])
         update.effective_message.edit_reply_markup(reply_markup=kbd)
+        if data[1] == "fwd":
+            query.answer("Switched to next entry")
+        else:
+            query.answer("Switched to previous entry")
+    else:
+        query.answer("This wont do anything.")
