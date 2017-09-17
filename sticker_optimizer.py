@@ -18,9 +18,15 @@ def sopt(bot, update, user, args):
         fl = update.message.photo[-1]
     elif update.message.document:
         fl = update.message.document
+    elif update.message.reply_to_message:
+        if update.message.reply_to_message.photo:
+            fl = update.message.reply_to_message.photo[-1]
+        elif update.message.reply_to_message.document:
+            fl = update.message.reply_to_message.document
+        else:
+            return core.message("You didnt supply picture as file/document")
     else:
         return core.message("You didnt supply picture as file/document")
-    # LOGGER.debug(fl)
     fl = bot.getFile(fl.file_id)
     fl.download(out=io)
     io.seek(0)
