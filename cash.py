@@ -11,13 +11,30 @@ PLUGINVERSION = 2
 # If you dont, module loader will fail to load the plugin!
 plugin = core.Plugin()
 CURR_TEMPLATE = """
-%s %s = %s %s
+%(in)s = %(out)s
 
-%s %s
+%(date)s
 Data from Yahoo Finance
 """
 LOGGER = logging.getLogger("/cash")
 
+def convert(in_c, out_c, count):
+    rate = requests.get(
+        "http://download.finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1",
+        params={
+            "s": in_c + out_c + "=X"
+        }
+    )
+    LOGGER.debug(rate.text)
+    csv_rate = list(csv.reader(StringIO(rate.text), delimiter=","))[0]
+    if csv_rate[1] == "N/A":
+        raise NameError("Invalid currency")
+    else:
+        out = {}
+        out["in"] = "%s %s" % (count, in_c.upper())
+        out["out"] = "%s %s" % (round(float(count)*float(csv_rate[1]), 2), out_c.upper())
+        out["date"] = csv_rate[-2] + " " + csv_rate[-1]
+        return out
 
 @plugin.command(command="/cash",
                 description="Converts currency",
@@ -43,22 +60,21 @@ def currency(bot, update, user, args):
                               parse_mode="HTML",
                               failed=True)
     else:
-        rate = requests.get(
-            "http://download.finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1",
-            params={
-                "s": args[1] + args[-1] + "=X"
-            }
-        )
-        LOGGER.debug(rate.text)
-        csv_rate = list(csv.reader(StringIO(rate.text), delimiter=","))[0]
-        if csv_rate[1] == "N/A":
+        try:
+            rate = convert(args[1], args[-1], args[0])
+        except NameError:
             return core.message('Bad currency name', failed=True)
         else:
-            return core.message(CURR_TEMPLATE % (
-                args[0],
-                args[1],
-                round(float(args[0])*float(csv_rate[1]), 2),
-                args[-1],
-                csv_rate[-2],
-                csv_rate[-1]
-            ))
+            return core.message(CURR_TEMPLATE % rate)
+
+@plugin.ai("octobot.cash")
+def ai_cash(bot, update, aidata):
+    out_c = aidata["result"]["parameters"]["currency-name"]
+    in_c = aidata["result"]["parameters"]["unit-currency"]["currency"]
+    count = aidata["result"]["parameters"]["unit-currency"]["amount"]
+    try:
+        rate = convert(in_c, out_c, count)
+    except NameError:
+        return core.message("Aw, I dont think Yahoo Finance knows that currency :(")
+    else:
+        return core.message(text=aidata["result"]["fulfillment"]["speech"] % rate)
