@@ -16,7 +16,9 @@ def handle_ai(bot, update):
     else:
         ai_resp = bot.modloader.handle_ai(update, resp["result"]["action"])
         if ai_resp:
-            return ai_resp(bot, update, resp)
+            ai_resp = ai_resp(bot, update, resp)
+            ai_resp.reply_to_prev_message = False
+            return ai_resp
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 plugin = core.Plugin()
