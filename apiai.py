@@ -35,7 +35,7 @@ def apiai_provider(bot, update):
     for pseudoname in react:
         if pseudoname.lower() in update.message.text.lower():
             airesp = handle_ai(bot, update)
-    if update.message.reply_to_message:
+    if update.message.reply_to_message and not airesp:
         if update.message.reply_to_message.from_user == bot.getMe():
             airesp = handle_ai(bot, update)
     if airesp:
