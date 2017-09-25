@@ -18,7 +18,6 @@ def handle_ai(bot, update):
         return core.message(text=resp["result"]["fulfillment"]["speech"])
     else:
         ai_resp = bot.modloader.handle_ai(update, resp["result"]["action"])
-        print("!!!!" + ai_resp)
         if ai_resp:
             ai_resp = ai_resp(bot, update, resp)
             ai_resp.reply_to_prev_message = False
