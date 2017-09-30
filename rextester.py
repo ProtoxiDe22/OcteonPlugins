@@ -43,7 +43,7 @@ def rt(bot, update, user, args):
     if args[0] == "getlangs":
         return core.message(_(LOCALE_STR["available_langs"]) % LANG_LIST_STR, parse_mode="HTML")
     elif len(args) == 1:
-        return core.message(_(LOCALE_STR["not_enough_arguments"]), failed=True, parse_mode="HTML")
+        return core.message(core.locale.get_localized(core.locale.locale_string("not_enough_arguments", "core"), update.message.chat.id) % "/rextester", failed=True, parse_mode="HTML")
     elif len(args) >= 2:
         if args[0] in LANGS:
             code = " ".join(args[1:]).split("/stdin")
