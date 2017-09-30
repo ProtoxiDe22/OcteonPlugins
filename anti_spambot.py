@@ -9,7 +9,7 @@ LOGGER = logging.getLogger("AntiSpamBot")
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 SPAMBOTS_RAW = """
-@pollsce
+@pollsc
 @acing
 @GroupManagerDomina
 @GroupManagerDomina
