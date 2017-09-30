@@ -4,7 +4,7 @@ from io import BytesIO
 import logging
 LOGGER = logging.getLogger("Sticker Optimizer")
 PLUGINVERSION = 2
-size = (512, 512)
+maxwidth, maxheight = 512, 512
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 plugin = core.Plugin()
@@ -31,7 +31,8 @@ def sopt(bot, update, user, args):
     fl.download(out=io)
     io.seek(0)
     image = Image.open(io)
-    image.thumbnail(size, Image.ANTIALIAS)
+    resz_rt = min(maxwidth/image.width, maxheight/image.height)
+    image = image.resize((int(image.width * resz_rt), int(image.height * resz_rt)), Image.ANTIALIAS)
     io_out = BytesIO()
     quality = 80
     image.save(io_out, "PNG", quality=quality)
