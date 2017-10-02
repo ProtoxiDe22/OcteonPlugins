@@ -3,12 +3,13 @@ from io import BytesIO
 
 from PIL import Image, ImageColor
 from telegram import Bot, Update
-from telegram.ext import CommandHandler, Updater
 import octeon
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
 plugin = octeon.Plugin()
+
+
 @plugin.command(command="/color",
                 description="Create color samples",
                 inline_supported=True,
@@ -45,6 +46,8 @@ def rgb(b: Bot, u: Update, user, args):
     Octeon:
     [255, 0, 0]
     """
+    if not args:
+        return
     if args[0].startswith("#"):
         color = args[0]
         try:
@@ -59,10 +62,16 @@ def rgb(b: Bot, u: Update, user, args):
             color = "#"+args[0][2:]
             usercolor = ImageColor.getrgb(color)
     else:
-        usercolor = int(args[0]), int(args[1]), int(args[2])
+        try:
+            usercolor = int(args[0]), int(args[1]), int(args[2])
+        except IndexError:
+            return octeon.message(text="balu basta")
+        except ValueError:
+            return octeon.message(text="Invalid Color Code supplied")
     color = usercolor
     im = Image.new(mode="RGB", size=(128, 128), color=usercolor)
     file = BytesIO()
     im.save(file, "PNG")
     file.seek(0)
     return octeon.message(text=color, photo=file)
+
