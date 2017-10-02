@@ -1,4 +1,4 @@
-import octeon
+import core as octeon
 import markovify as markov
 PLUGINVERSION = 2
 # Always name this variable as `plugin`

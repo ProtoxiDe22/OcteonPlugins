@@ -1,4 +1,4 @@
-﻿import octeon, requests, constants
+﻿import core as octeon, requests, constants
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
