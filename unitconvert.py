@@ -1,9 +1,9 @@
 import bitmath
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 MSGTMPL = """
 %(val_a)s = %(val_b)s
 """
@@ -30,8 +30,8 @@ def convert(bot, update, user, args):
                 }
             for value in d:
                 d[value] = d[value].format(FORMATTER)
-            return octeon.message(MSGTMPL % d)        
+            return core.message(MSGTMPL % d)        
         except ValueError as e:
-                return octeon.message(str(e).title())
+                return core.message(str(e).title())
     else:
-        return octeon.message("No data supplied!")
+        return core.message("No data supplied!")

@@ -1,28 +1,32 @@
 """Timezones"""
 from telegram import Bot, Update
 import pendulum
-import constants
+import core
+
 from pytzdata.exceptions import TimezoneNotFound
 TIMEFORMAT = '%A %d%tof %B %Y %H:%M:%S'
-def preload(*_):
-    """We dont need preload, so it is disabled"""
-    return
 
+PLUGINVERSION = 2
+# Always name this variable as `plugin`
+# If you dont, module loader will fail to load the plugin!
+plugin = core.Plugin()
+
+
+@plugin.command(command="/tz",
+                description="Sends info about specifed zone(for example:Europe/Moscow)",
+                inline_supported=True,
+                required_args=1,
+                hidden=False)
 def timezonecmd(_: Bot, update: Update, user, args):
-    """/tz command"""
+    """
+    Example usage:
+    User: /tz Europe/Moscow
+    Bot: Europe/Moscow: Friday 18 of August 2017 08:21:04
+    """
     timezone = " ".join(args)
     try:
         timezone = pendulum.now(timezone)
-    except TimezoneNotFound:
-        return "⚠You specifed unknown timezone", constants.TEXT, "failed"
+    except (TimezoneNotFound, ValueError):
+        return core.message("⚠You specifed unknown timezone", failed=True)
     else:
-        return timezone.timezone_name + ": " + timezone.format(TIMEFORMAT), constants.TEXT
-
-COMMANDS = [
-    {
-        "command":"/tz",
-        "function":timezonecmd,
-        "description":"Sends info about specifed zone(for example:Europe/Moscow)",
-        "inline_support": True
-    }
-]
+        return core.message(timezone.timezone_name + ": " + timezone.format(TIMEFORMAT))

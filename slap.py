@@ -2,7 +2,7 @@ import random
 import sys
 from pprint import pprint
 
-import octeon
+import core
 
 PLUGINVERSION = 2
 
@@ -109,7 +109,7 @@ SLAP_TEMPLATES = {
 ]
 }
 }
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 def generate_slap_message(user1, user2):
     parts = {"user":"@" + user2}
@@ -127,4 +127,4 @@ def slap(bot, update, user, args):
         message = generate_slap_message(user.username, update.message.reply_to_message.from_user.username)
     else:
         message = generate_slap_message(bot.get_me().username, user.username)
-    return octeon.message(text=message)
+    return core.message(text=message)

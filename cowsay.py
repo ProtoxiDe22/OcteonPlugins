@@ -1,16 +1,23 @@
 from subprocess import Popen, PIPE
 from PIL import Image, ImageFont, ImageDraw
 from io import BytesIO
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
+
+
 @plugin.command(command="/cowsay",
                 description="Have you mooed today?",
                 inline_supported=True,
+                required_args=1,
                 hidden=False)
 def cowsay(_, update, user, args):
+    """
+    User:/cowsay test
+    Bot:[Picture of cow saying moo]
+    """
     args = " ".join(args)
     proc = Popen(['cowsay'], stdout=PIPE, stdin=PIPE)
     stdout = str(
@@ -35,4 +42,4 @@ def cowsay(_, update, user, args):
     photo = BytesIO()
     img.save(photo, 'PNG')
     photo.seek(0)
-    return octeon.message(photo=photo)
+    return core.message(photo=photo)

@@ -1,10 +1,10 @@
 import requests
 
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 TEMPLATE = """
 <b>Community</b>:<code>%s</code>
 <b>Store</b>:<code>%s</code>
@@ -26,7 +26,7 @@ STATE = lambda service:"🙅Down" if service["online"] == 2 else "👌Up"
                 hidden=False)
 def steamstatus(bot, update, user, args):
     steamstatus = requests.get("https://steamgaug.es/api/v2").json()
-    message = octeon.message(TEMPLATE % (
+    message = core.message(TEMPLATE % (
         STATE(steamstatus["SteamCommunity"]),
         STATE(steamstatus["SteamStore"]),
         STATE(steamstatus["ISteamUser"]),

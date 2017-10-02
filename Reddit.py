@@ -4,13 +4,12 @@ Reddit module
 import logging
 
 from telegram import Bot, Update
-from praw import Reddit, exceptions
-from prawcore import exceptions
+import praw, prawcore
 from settings import REDDITID, REDDITUA, REDDITSECRET
 
 import constants # pylint: disable=E0401
 LOGGER = logging.getLogger("Reddit")
-REDDIT = Reddit(client_id=REDDITID,
+REDDIT = praw.Reddit(client_id=REDDITID,
                 client_secret=REDDITSECRET,
                 user_agent=REDDITUA
                )
@@ -34,7 +33,7 @@ def posts(bot: Bot, update: Update, user, args): # pylint: disable=W0613
         for post in subreddit.hot(limit=10):
             message += ' • <a href="%s">%s</a>\n' % (post.shortlink, post.title)
         return message, constants.HTMLTXT
-    except exceptions.BadRequest:
+    except (praw.exceptions.PRAWException, prawcore.exceptions.PrawcoreException):
         pass
 
 COMMANDS = [

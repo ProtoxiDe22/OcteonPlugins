@@ -3,16 +3,16 @@ from io import BytesIO
 
 from PIL import Image, ImageColor
 from telegram import Bot, Update
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
-
+plugin = core.Plugin()
 
 @plugin.command(command="/color",
                 description="Create color samples",
                 inline_supported=True,
+                required_args=1,
                 hidden=False)
 def rgb(b: Bot, u: Update, user, args):
     """
@@ -22,28 +22,28 @@ def rgb(b: Bot, u: Update, user, args):
     User:
     /color #FF0000
 
-    Octeon:
+    OctoBot:
     [ Photo ]
 
-    Octeon:
+    OctoBot:
     #FF0000
 
     User:
     /color 255 0 0
 
-    Octeon:
+    OctoBot:
     [ Photo ]
 
-    Octeon Dev:
+    OctoBot Dev:
     [255, 0, 0]
 
     User:
     /color 0xFF 0x0 0x0
 
-    Octeon:
+    OctoBot:
     [ Photo ]
 
-    Octeon:
+    OctoBot:
     [255, 0, 0]
     """
     if not args:
@@ -53,7 +53,7 @@ def rgb(b: Bot, u: Update, user, args):
         try:
             usercolor = ImageColor.getrgb(color)
         except Exception:
-            return octeon.message("Invalid Color Code supplied", failed=True)
+            return core.message("Invalid Color Code supplied", failed=True)
     elif args[0].startswith("0x"):
         if len(args) > 2:
             usercolor = int(args[0][2:], 16), int(
@@ -65,13 +65,12 @@ def rgb(b: Bot, u: Update, user, args):
         try:
             usercolor = int(args[0]), int(args[1]), int(args[2])
         except IndexError:
-            return octeon.message(text="balu basta")
+            return core.message(text="balu basta")
         except ValueError:
-            return octeon.message(text="Invalid Color Code supplied")
+            return core.message(text="Invalid Color Code supplied")
     color = usercolor
     im = Image.new(mode="RGB", size=(128, 128), color=usercolor)
     file = BytesIO()
     im.save(file, "PNG")
     file.seek(0)
-    return octeon.message(text=color, photo=file)
-
+    return core.message(text=color, photo=file)

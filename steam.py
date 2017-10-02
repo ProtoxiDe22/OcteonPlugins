@@ -1,5 +1,5 @@
 """Steam module"""
-from telegram.ext import Updater, CommandHandler
+import core
 from telegram import Bot, Update
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from requests import get
@@ -13,11 +13,32 @@ def getuser(url):
     return dict(r)
 
 
-def preload(*_):
-    return
+PLUGINVERSION = 2
+# Always name this variable as `plugin`
+# If you dont, module loader will fail to load the plugin!
+plugin = core.Plugin()
 
 
+@plugin.command(command="/steam",
+                description="Sends info about profile on steam. Use custom user link. Example:/steam gabelogannewell",
+                inline_supported=True,
+                hidden=False)
 def steam(b: Bot, u: Update, user, args):
+    """
+    Example usage:
+    User A: Where is pyro update?
+    User B: Ask him
+    User B: /steam gabelogannewell
+    Bot: [Account userpic]
+    Bot:
+    User:Rabscuttle
+    SteamID64:76561197960287930
+    Last Online
+    🛡️User is not VACed
+    💱User is not trade banned
+    🔓User account is not limited
+    ⚠️User account visibility is limited
+    """
     if len(args) >= 1:
         account = getuser(args[0])
         if "response" in account:
@@ -48,7 +69,7 @@ def steam(b: Bot, u: Update, user, args):
                 message += "⚠️User account visibility is limited"
             keyboard = [
                 [InlineKeyboardButton(
-                    "➕Add to friends", url="http://octeon.octonezd.pw/steam.html?steamid=" + user["steamID64"])]
+                    "➕Add to friends", url="http://core.octonezd.pw/steam.html?steamid=" + user["steamID64"])]
             ]
             markup = InlineKeyboardMarkup(keyboard)
             return [user["avatarFull"], message, markup], constants.PHOTOWITHINLINEBTN
