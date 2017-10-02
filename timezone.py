@@ -1,7 +1,7 @@
 """Timezones"""
 from telegram import Bot, Update
 import pendulum
-import octeon
+import core
 
 from pytzdata.exceptions import TimezoneNotFound
 TIMEFORMAT = '%A %d%tof %B %Y %H:%M:%S'
@@ -9,7 +9,7 @@ TIMEFORMAT = '%A %d%tof %B %Y %H:%M:%S'
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/tz",
@@ -26,7 +26,7 @@ def timezonecmd(_: Bot, update: Update, user, args):
     timezone = " ".join(args)
     try:
         timezone = pendulum.now(timezone)
-    except TimezoneNotFound:
-        return octeon.message("⚠You specifed unknown timezone", failed=True)
+    except (TimezoneNotFound, ValueError):
+        return core.message("⚠You specifed unknown timezone", failed=True)
     else:
-        return octeon.message(timezone.timezone_name + ": " + timezone.format(TIMEFORMAT))
+        return core.message(timezone.timezone_name + ": " + timezone.format(TIMEFORMAT))

@@ -1,5 +1,5 @@
 """Steam module"""
-import octeon
+import core
 from telegram import Bot, Update
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from requests import get
@@ -16,7 +16,7 @@ def getuser(url):
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/steam",
@@ -69,7 +69,7 @@ def steam(b: Bot, u: Update, user, args):
                 message += "⚠️User account visibility is limited"
             keyboard = [
                 [InlineKeyboardButton(
-                    "➕Add to friends", url="http://octeon.octonezd.pw/steam.html?steamid=" + user["steamID64"])]
+                    "➕Add to friends", url="http://core.octonezd.pw/steam.html?steamid=" + user["steamID64"])]
             ]
             markup = InlineKeyboardMarkup(keyboard)
             return [user["avatarFull"], message, markup], constants.PHOTOWITHINLINEBTN

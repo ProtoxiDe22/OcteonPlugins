@@ -6,7 +6,7 @@ import logging
 
 from telegram import Bot, Update
 import requests
-import octeon
+import core
 
 LOGGER = logging.getLogger("HTTP codes")
 CODES = requests.get(
@@ -21,8 +21,13 @@ Link to specification:%(spec_href)s
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
+def getcode(code):
+    for code_info in CODES:
+        if code == code_info["code"]:
+            return code_info
+    raise NameError("No such code")
 
 @plugin.command(command="/httpcode",
                 description="Sends information about specific http status code",
@@ -40,9 +45,20 @@ def get_code(_: Bot, __: Update, ___, args):  # pylint: disable=W0613
     """
 
     if len(args[0]) == 3:
-        for code in CODES:
-            if args[0] == code["code"]:
-                return octeon.message(MESSAGE % code)
-        return octeon.message("Cant find " + args[0], failed=True)
+        try:
+            code = getcode(args[0])
+        except NameError:
+            return core.message("Cant find " + args[0], failed=True)
+        else:
+            return core.message(MESSAGE % code)
     else:
-        return octeon.message("Invalid code passed:" + args[0], failed=True)
+        return core.message("Invalid code passed:" + args[0], failed=True)
+
+@plugin.ai("octobot.httpcode")
+def ai_httpcode(bot, update, aidata):
+    try:
+        code = getcode(aidata["result"]["parameters"]["number"])
+    except NameError:
+        return core.message("I dont think it is a valid HTTP code at all...", failed=True)
+    else:
+        return core.message(aidata["result"]["fulfillment"]["speech"] % code)

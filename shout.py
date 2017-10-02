@@ -1,8 +1,8 @@
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/shout",
@@ -30,4 +30,4 @@ def shout(bot, update, user, args):
     result[0] = text[0]
     result = "".join(result)
     msg = "```\n" + result + "```"
-    return octeon.message(msg, parse_mode="MARKDOWN")
+    return core.message(msg, parse_mode="MARKDOWN")

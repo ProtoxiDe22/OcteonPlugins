@@ -1,8 +1,8 @@
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 def convert(temp, unit):
@@ -37,4 +37,4 @@ def temperatures(bot, update, user, args):
         unit = args[-1]
         temp = float(args[0])
     out = convert(temp, unit)
-    return octeon.message(text=out)
+    return core.message(text=out)

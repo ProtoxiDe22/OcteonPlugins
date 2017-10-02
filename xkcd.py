@@ -8,11 +8,11 @@ from telegram.ext import MessageHandler, Updater, Filters
 from urllib.parse import quote
 import requests, json
 
-import octeon
+import core
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 TEXT = """
 *title:* %(safe_title)s
@@ -32,7 +32,7 @@ def xkcd(bot: Bot, update: Update, user, args): # pylint: disable=W0613
     User:
     /xkcd 1
 
-    Octeon:
+    OctoBot:
     title: Barrel - Part 1
     number: 1
     date(yyyy-mm-dd for christ's sake): 2006-01-01
@@ -62,4 +62,4 @@ def xkcd(bot: Bot, update: Update, user, args): # pylint: disable=W0613
     #msg.reply_photo(photo = data['img']) Cause telegram makes preview of comic, we dont need it anymore
     data['month'] = data['month'].zfill(2)
     data['day'] = data['day'].zfill(2)
-    return octeon.message(TEXT % data, parse_mode="MARKDOWN")
+    return core.message(TEXT % data, parse_mode="MARKDOWN")

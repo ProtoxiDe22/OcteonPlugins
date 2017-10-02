@@ -3,7 +3,7 @@ Know Your Meme command
 """
 import requests
 from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup
-import octeon
+import core
 
 
 TEMPLATE = """%(name)s
@@ -15,7 +15,7 @@ Origin:%(origin)s
 PLUGINVERSION = 2
 # Always name this variable as `plugin`
 # If you dont, module loader will fail to load the plugin!
-plugin = octeon.Plugin()
+plugin = core.Plugin()
 
 
 @plugin.command(command="/meme",
@@ -46,6 +46,6 @@ def meme(bot: Bot, update: Update, user, args):  # pylint: disable=W0613
                 "Definition on KnowYourMeme.com", url="http://knowyourmeme.com" + meme["url"])]
         ]
         markup = InlineKeyboardMarkup(keyboard)
-        return octeon.message(text=message, reply_markup=markup, photo=meme["icon_url"])
+        return core.message(text=message, inline_keyboard=markup, photo=meme["icon_url"])
     else:
-        return octeon.message(text='Not found!', failed=True)
+        return core.message(text='Not found!', failed=True)
