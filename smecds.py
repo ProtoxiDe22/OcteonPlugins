@@ -1,5 +1,5 @@
 """
-SMECDS
+66SMECDS
 """
 import core, random
 PLUGINVERSION = 2
@@ -17,3 +17,7 @@ random.seed()
 def smecds(bot, update):
     ds = random.choice(stagismo)
     return core.message(text="Secondo me é colpa "+ds)
+#@plugin.message(regex="(?i).*(s[aeiou]s)")
+@plugin.message(regex="(?is)(?:^s[aeiou]s\s|.*s[aeiou]s\s|.*s[aeiou]s$|^s[aeiou]s$)")
+def sas(bot,update):
+    return core.message(text="Sassi")
