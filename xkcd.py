@@ -48,7 +48,7 @@ def xkcd(bot: Bot, update: Update, user, args): # pylint: disable=W0613
         if argument.isdigit():
             id = argument
         else:
-            queryresult = requests.get('https://relevantxkcd.appspot.com/process?',params={"action":"xkcd","query":quote(argument)}).text
+            queryresult = requests.get('https://relevantxkcd.appspot.com/process?',params={"action":"xkcd","query":argument}).text
             id = queryresult.split(" ")[2].lstrip("\n")
     data = ""
     if id == -1:
